@@ -85,12 +85,16 @@ public:
     return recVector[0]->getGlobalBounds();
   }
 
-  bool gameOverCondition() const
+  bool gameOverCondition(sf::FloatRect const& otherHead) const
   {
     auto headBounds = getHeadBounds();
+
+    if(headBounds.intersects(otherHead))
+      return true;
     for(int i=1; i < recVector.size(); i++)
     {
-      if(headBounds.intersects(recVector[i]->getGlobalBounds()))
+      if(headBounds.intersects(recVector[i]->getGlobalBounds())
+        ||otherHead.intersects(recVector[i]->getGlobalBounds()))
         return true;
     }
 

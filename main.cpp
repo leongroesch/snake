@@ -12,11 +12,15 @@ int main()
   windowWidth = window.getSize().x;
   windowHeight = window.getSize().y;
   Snake snake(sf::Color(255, 0, 0), sf::Vector2f(windowWidth-50, windowHeight/2));
+  Snake snake2(sf::Color(0, 0, 255), sf::Vector2f(50, windowHeight/2));
   food fo;
   bool gameOver;
 
-  sf::Text scoreLabel = createLabel(std::to_string(snake.getSize()), sf::Color::Red, 50);
-  scoreLabel.setPosition(10, 10);
+  sf::Text scoreLabel1 = createLabel(std::to_string(snake.getSize()), sf::Color::Red, 50);
+  scoreLabel1.setPosition(windowWidth-100, 10);
+  sf::Text scoreLabel2 = createLabel(std::to_string(snake.getSize()), sf::Color::Blue, 50);
+  scoreLabel2.setPosition(10, 10);
+
   sf::Text gameOverLabel = createLabel("Game Over", sf::Color::Red, 100);
   gameOverLabel.setPosition(windowWidth/2, windowHeight/2);
   auto gb = gameOverLabel.getGlobalBounds();
@@ -35,9 +39,15 @@ int main()
           snake.keyPressed(Direction::left);
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
           snake.keyPressed(Direction::right);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+          snake2.keyPressed(Direction::left);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+          snake2.keyPressed(Direction::right);
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gameOver){
           snake.respawn();
-          scoreLabel.setString(std::to_string(snake.getSize()));
+          snake2.respawn();
+          scoreLabel1.setString(std::to_string(snake.getSize()));
+          scoreLabel2.setString(std::to_string(snake2.getSize()));
           gameOver = false;
         }
       }
@@ -50,18 +60,27 @@ int main()
 
     window.clear();
     snake.draw(window);
+    snake2.draw(window);
     window.draw(fo);
-    window.draw(scoreLabel);
+    window.draw(scoreLabel1);
+    window.draw(scoreLabel2);
     if(!gameOver)
     {
       snake.update();
-      if(snake.gameOverCondition()){
+      snake2.update();
+      if(snake.gameOverCondition(snake2.getHeadBounds())
+        || snake2.gameOverCondition(snake.getHeadBounds())){
         gameOver = true;
       }
       if(fo.gotEaten(snake.getHeadBounds())){
         snake.addTail();
         fo.respawn();
-        scoreLabel.setString(std::to_string(snake.getSize()));
+        scoreLabel1.setString(std::to_string(snake.getSize()));
+      }
+      else if(fo.gotEaten(snake2.getHeadBounds())){
+        snake2.addTail();
+        fo.respawn();
+        scoreLabel2.setString(std::to_string(snake2.getSize()));
       }
     }
     else{

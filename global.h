@@ -3,6 +3,6 @@
 static int windowWidth;
 static int windowHeight;
 static const int startLength = 4;
-static const float velocity = 0.2;
+static const float velocity = 0.1;
 enum Direction {left = 0, down, right, up};
 #endif
