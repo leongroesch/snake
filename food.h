@@ -11,13 +11,11 @@ class food : public sf::RectangleShape
 public:
   food() : RectangleShape(sf::Vector2f(10, 10))
   {
-    time_t t;
     float x, y;
-    srand((unsigned)time(&t));
     x = rand() % (windowWidth-20) + 10;
     y = rand() % (windowHeight-20) + 10;
     setPosition(x, y);
-    setFillColor(sf::Color::Green);
+    setFillColor(sf::Color::White);
   }
 
   void respawn()
