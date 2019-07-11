@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <chrono>
 #include <vector>
 
@@ -14,6 +15,10 @@ private:
   std::vector<Snake> snakes;
   sf::RenderWindow window;
   std::unique_ptr<sf::Text> gameOverLabel;
+  sf::SoundBuffer eatBuffer;
+  sf::Sound eatSound;
+  sf::SoundBuffer overBuffer;
+  sf::Sound overSound;
 
   void initGameOverLabel()
   {
@@ -61,6 +66,7 @@ private:
       {
         if(food.gotEaten(snake.getHeadBounds())){
           snake.addTail();
+          eatSound.play();
           food.respawn();
         }
       }
@@ -79,11 +85,17 @@ private:
     {
       snake.update();
       if(snake.gameOverCondition())
+      {
         gameOver = true;
+        overSound.play();
+      }
       for(auto& other : snakes)
       {
         if(snake != other && snake.gameOverCondition(other.getHeadBounds()))
+        {
           gameOver = true;
+          overSound.play();
+        }
       }
     }
   }
@@ -102,9 +114,15 @@ public:
       windowWidth = window.getSize().x;
       windowHeight = window.getSize().y;
       initGameOverLabel();
-      snakes.push_back(Snake(sf::Color(255, 0, 0), sf::Vector2f(windowWidth-100, windowHeight/2), sf::Keyboard::Left, sf::Keyboard::Right));
+      if(!eatBuffer.loadFromFile("sound.wav"))
+        throw "sound.wav could not be loaded";
+      eatSound.setBuffer(eatBuffer);
+      if(!overBuffer.loadFromFile("error.wav"))
+        throw "error.wav could not be loaded";
+      overSound.setBuffer(overBuffer);
+      snakes.push_back(Snake(sf::Color(255, 0, 0), sf::Vector2f(windowWidth/2 +100, windowHeight/2), sf::Keyboard::Left, sf::Keyboard::Right));
       if(snakeCount == 2)
-        snakes.push_back(Snake(sf::Color(0, 0, 255), sf::Vector2f(100, windowHeight/2), sf::Keyboard::A, sf::Keyboard::D));
+        snakes.push_back(Snake(sf::Color(0, 0, 255), sf::Vector2f(windowWidth/2 -100, windowHeight/2), sf::Keyboard::A, sf::Keyboard::D));
       for(int i=0; i < foodCount; i++)
         meals.push_back(food());
   }
