@@ -78,6 +78,8 @@ private:
     for(auto& snake : snakes)
     {
       snake.update();
+      if(snake.gameOverCondition())
+        gameOver = true;
       for(auto& other : snakes)
       {
         if(snake != other && snake.gameOverCondition(other.getHeadBounds()))
@@ -100,9 +102,9 @@ public:
       windowWidth = window.getSize().x;
       windowHeight = window.getSize().y;
       initGameOverLabel();
-      snakes.push_back(Snake(sf::Color(255, 0, 0), sf::Vector2f(windowWidth-50, windowHeight/2), sf::Keyboard::Left, sf::Keyboard::Right));
+      snakes.push_back(Snake(sf::Color(255, 0, 0), sf::Vector2f(windowWidth-100, windowHeight/2), sf::Keyboard::Left, sf::Keyboard::Right));
       if(snakeCount == 2)
-        snakes.push_back(Snake(sf::Color(0, 0, 255), sf::Vector2f(50, windowHeight/2), sf::Keyboard::A, sf::Keyboard::D));
+        snakes.push_back(Snake(sf::Color(0, 0, 255), sf::Vector2f(100, windowHeight/2), sf::Keyboard::A, sf::Keyboard::D));
       for(int i=0; i < foodCount; i++)
         meals.push_back(food());
   }

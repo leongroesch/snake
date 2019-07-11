@@ -100,20 +100,21 @@ public:
     return recVector[0]->getGlobalBounds();
   }
 
-  bool gameOverCondition(sf::FloatRect const& otherHead) const
+  bool gameOverCondition(sf::FloatRect const& otherHead = sf::FloatRect(-10.f, -10.f, 1.f, 1.f)) const
   {
     auto headBounds = getHeadBounds();
 
     if(headBounds.intersects(otherHead))
       return true;
-    for(int i=1; i < recVector.size(); i++)
-    {
-      if(headBounds.intersects(recVector[i]->getGlobalBounds())
-        ||otherHead.intersects(recVector[i]->getGlobalBounds()))
-        return true;
-    }
 
-    return !headBounds.intersects(windowBounds);
+      for(int i=1; i < recVector.size(); i++)
+      {
+        if(headBounds.intersects(recVector[i]->getGlobalBounds())
+          ||otherHead.intersects(recVector[i]->getGlobalBounds()))
+          return true;
+      }
+
+      return !headBounds.intersects(windowBounds);
   }
 
   void respawn()
