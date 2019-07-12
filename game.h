@@ -120,9 +120,14 @@ public:
       if(!overBuffer.loadFromFile("error.wav"))
         throw "error.wav could not be loaded";
       overSound.setBuffer(overBuffer);
-      snakes.push_back(Snake(sf::Color(255, 0, 0), sf::Vector2f(windowWidth/2 +100, windowHeight/2), sf::Keyboard::Left, sf::Keyboard::Right));
+
       if(snakeCount == 2)
+      {
         snakes.push_back(Snake(sf::Color(0, 0, 255), sf::Vector2f(windowWidth/2 -100, windowHeight/2), sf::Keyboard::A, sf::Keyboard::D));
+        snakes.push_back(Snake(sf::Color(255, 0, 0), sf::Vector2f(windowWidth/2 +100, windowHeight/2), sf::Keyboard::Left, sf::Keyboard::Right));
+      }
+      else
+        snakes.push_back(Snake(sf::Color(255, 0, 0), sf::Vector2f(windowWidth/2, windowHeight/2), sf::Keyboard::Left, sf::Keyboard::Right));
       for(int i=0; i < foodCount; i++)
         meals.push_back(food());
   }
